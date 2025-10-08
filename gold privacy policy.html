@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bett's Portfolio | Software Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #00897b;
+      --primary-dark: #00695c;
+      --primary-light: #4db6ac;
+      --secondary: #ff9800;
+      --dark: #333;
+      --light: #f4f7f9;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    
+    .splash-screen, .main-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      transition: opacity 1s ease;
+    }
+    
+    .splash-screen {
+      height: 100vh;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    
+    .splash-screen .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    
+    .spinner {
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top: 6px solid var(--white);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .main-content {
+      opacity: 0;
+      z-index: 1;
+    }
+    
+    .main-content.visible {
+      opacity: 1;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+      background-size: cover;
+    }
+    
+    nav {
+      background-color: var(--dark);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--white);
+    }
+    
+    .logo span {
+      color: var(--secondary);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    nav a:hover {
+      color: var(--secondary);
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: var(--transition);
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    .main-content .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--white);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .hero h1 {
+      font-size: 2.8rem;
+      margin: 0.5rem 0;
+      font-weight: 700;
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    
+    .hero-btns {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn, .contact-btn, .ngeno-button, .project-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .btn:hover, .contact-btn:hover {
+      background-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn-secondary {
+      background-color: transparent;
+      border: 2px solid var(--white);
+    }
+    
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .ngeno-button {
+      background-color: #004aad;
+    }
+    
+    .ngeno-button:hover {
+      background-color: #003080;
+      transform: translateY(-3px);
+    }
+    
+    .project-btn {
+      background-color: var(--secondary);
+    }
+    
+    .project-btn:hover {
+      background-color: #e68900;
+      transform: translateY(-3px);
+    }
+    
+    section {
+      padding: 5rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    h2 {
+      color: var(--primary-dark);
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+    
+    .section-subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    
+    .about-text p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .about-highlights {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .highlight-card {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .highlight-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .highlight-card i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .projects-grid, .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .card {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .project-image {
+      height: 200px;
+      width: 100%;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .project-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .project-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--primary-dark);
+    }
+    
+    .project-card p {
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+    
+    .project-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .skill-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    
+    .skill-card i {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .skill-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .contact-item i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      width: 40px;
+    }
+    
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: 500;
+    }
+    
+    .form-control {
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 137, 123, 0.2);
+    }
+    
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .submit-btn {
+      align-self: flex-start;
+      background-color: var(--primary);
+    }
+    
+    .submit-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    footer {
+      background: var(--dark);
+      color: var(--white);
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+    
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-logo span {
+      color: var(--secondary);
+    }
+    
+    .footer-about p {
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: var(--white);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links h3, .footer-contact h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .footer-links h3::after, .footer-contact h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--secondary);
+    }
+    
+    .footer-links ul {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: var(--secondary);
+      padding-left: 5px;
+    }
+    
+    .footer-contact p {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    
+    .footer-contact i {
+      color: var(--secondary);
+    }
+    
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    /* Additional Projects Section */
+    .additional-projects {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .additional-projects-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .additional-project-item {
+      background: var(--white);
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+    
+    .additional-project-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .additional-project-item a {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .additional-project-item a:hover {
+      color: var(--primary);
+    }
+    
+    .view-more-btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.5rem;
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .view-more-btn:hover {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .about-content, .contact-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .about-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 1.1rem;
+      }
+      
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--dark);
+        flex-direction: column;
+        padding: 1rem 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .nav-links.active {
+        display: flex;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .projects-grid, .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-btns, .project-links {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn, .contact-btn, .ngeno-button, .project-btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      section {
+        padding: 3rem 1rem;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+      
+      .card {
+        padding: 0;
+      }
+      
+      .project-content {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash screen -->
+  <div class="splash-screen" id="splash">
+    <img src="https://i.ibb.co/chZcYSVh/your-image.jpg" alt="Bett" class="profile-pic" />
+    <div class="spinner"></div>
+    <h2>Loading Portfolio</h2>
+    
+    
+    
+    <p>Welcome to Bett's Professional Portfolio</p>
+  </div>
+  
+  <!-- Main content -->
+  <div class="main-content" id="main">
+    <nav>
+      <div class="nav-container">
+        <div class="logo">Bett<span>.</span></div>
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+    
+    <header id="home">
+      <div class="hero">
+        <img src="https://i.ibb.co/chZcYSVh/your-image.jpg" alt="Bett Profile" class="profile-pic">
+        <h1>Hi, I'm Emmanuel Bett</h1>
+        <p>Full-Stack Developer & Problem Solver</p>
+        <p>Building smart applications and real-world tech solutions</p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn"><i class="fas fa-code"></i> View My Work</a>
+          <a href="#contact" class="btn btn-secondary"><i class="fas fa-envelope"></i> Get In Touch</a>
+        </div>
+      </div>
+    </header>
+    
+    <section id="about">
+      <div class="section-header">
+        <h2>About Me</h2>
+        <p class="section-subtitle">Learn more about my background, skills, and professional journey</p>
+      </div>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            I'm a passionate software developer with expertise in creating innovative solutions for real-world problems. 
+            My focus is on developing robust mobile and web applications that deliver exceptional user experiences.
+          </p>
+          <p>
+            Currently, I'm working on several impactful projects including smart waste management systems, 
+            fraud detection dashboards, and the Mchango fundraiser platform with integrated payment solutions.
+          </p>
+          <p>
+            I believe in the power of technology to transform businesses and improve lives, and I'm always 
+            excited to take on new challenges that push the boundaries of what's possible.
+          </p>
+        </div>
+        <div class="about-highlights">
+          <div class="highlight-card">
+            <i class="fas fa-laptop-code"></i>
+            <h3>Web Development</h3>
+            <p>Creating responsive and interactive web applications</p>
+          </div>
+          <div class="highlight-card">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Mobile Apps</h3>
+            <p>Building cross-platform mobile solutions</p>
+          </div>
+          <div class="highlight-card">
+            <i class="fas fa-database"></i>
+            <h3>Backend Systems</h3>
+            <p>Developing robust server-side applications</p>
+          </div>
+          <div class="highlight-card">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Problem Solving</h3>
+            <p>Finding innovative solutions to complex challenges</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section id="projects">
+      <div class="section-header">
+        <h2>My Projects</h2>
+        <p class="section-subtitle">A showcase of my recent work and professional projects</p>
+      </div>
+      <div class="projects-grid">
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Loan Management System" class="project-image">
+          <div class="project-content">
+            <h3>Loan Management System</h3>
+            <p>A comprehensive system for managing loan applications, approvals, and repayments with detailed reporting and analytics.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/Loan/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://i.ibb.co/kdFZpFK/images-5.jpg" alt="School Management System" class="project-image">
+          <div class="project-content">
+            <h3>School Management System</h3>
+            <p>Complete school administration platform handling student records, attendance, grading, and communication.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/School-/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Hospital Management System" class="project-image">
+          <div class="project-content">
+            <h3>Hospital Management System</h3>
+            <p>Healthcare management solution for patient records, appointments, billing, and inventory management.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/hospitalmanagement/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="BettKe Space Portfolio" class="project-image">
+          <div class="project-content">
+            <h3>BettKe Space (Portfolio)</h3>
+            <p>My personal portfolio website showcasing my skills, projects, and professional experience.</p>
+            <div class="project-links">
+              <a href="http://bettke.space/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Visit Site</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Nngong Website" class="project-image">
+          <div class="project-content">
+            <h3>Nngong Website</h3>
+            <p>Professional website for a political leader with campaign information, news, and contact details.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/Nngong/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Shop Inventory System" class="project-image">
+          <div class="project-content">
+            <h3>Shop Inventory System</h3>
+            <p>Inventory management solution for retail businesses with stock tracking, sales reporting, and supplier management.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/Shop-inventory-/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Mini Library Management" class="project-image">
+          <div class="project-content">
+            <h3>Mini Library Management</h3>
+            <p>Library system for managing books, members, borrowing, and returns with an intuitive user interface.</p>
+            <div class="project-links">
+              <a href="https://manuubett.github.io/Mini-library-management-system-/" class="project-btn" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card project-card">
+          <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="FarmerApp" class="project-image">
+          <div class="project-content">
+            <h3>FarmerApp</h3>
+            <p>Connect farmers to buyers with ease and transparency, improving market access for agricultural products.</p>
+            <div class="project-links">
+              <a href="http://bettke.space" class="btn" target="_blank"><i class="fab fa-github"></i> view Demo</a>
+            </div>
+            </div>
+          </div>
+        
+      
+      <div class="section-header" style="margin-top: 4rem;">
+        <h2>Featured Project</h2>
+      </div>
+      <div class="card" style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Johan Ngeno Website" class="project-image">
+        <div class="project-content">
+          <h3>Johan Ngeno Website</h3>
+          <p>A personal apolitical website for Johan Ngeno, showcasing his background, achievements, and community initiatives with a modern, responsive design.</p>
+          <a href="https://manuubett.github.io/Nngong/" target="_blank" class="ngeno-button" style="margin-top: 1.5rem;"><i class="fas fa-globe"></i> Visit the Website</a>
+        </div>
+      </div>
+      
+      <!-- Additional Projects Section -->
+      <div class="additional-projects">
+        <h3 style="text-align: center; margin-bottom: 1rem;">More Projects</h3>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 1.5rem;">
+          With over 40 projects in my portfolio, here are some additional highlights:
+        </p>
+        <div class="additional-projects-list">
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Ni Nancy Salon Management</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Smart Waste Management System</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Fraud Detection Dashboard</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> E-commerce Platform</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Real Estate Listing App</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Task Management System</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Weather Forecast App</a>
+          </div>
+          <div class="additional-project-item">
+            <a href="#"><i class="fas fa-external-link-alt"></i> Expense Tracker</a>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <a href="#" class="view-more-btn">View All Projects</a>
+        </div>
+      </div>
+    </section>
+    
+    <section id="skills">
+      <div class="section-header">
+        <h2>My Skills</h2>
+        <p class="section-subtitle">Technologies and tools I work with to bring ideas to life</p>
+      </div>
+      <div class="skills-grid">
+        <div class="card skill-card">
+          <i class="fab fa-html5"></i>
+          <h3>HTML5 & CSS3</h3>
+          <p>Semantic markup and modern styling</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fab fa-js-square"></i>
+          <h3>JavaScript</h3>
+          <p>Interactive and dynamic web experiences</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fas fa-database"></i>
+          <h3>Firebase</h3>
+          <p>Backend-as-a-service and real-time databases</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fas fa-microchip"></i>
+          <h3>Arduino & IoT</h3>
+          <p>Embedded systems and smart devices</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fab fa-node-js"></i>
+          <h3>Node.js</h3>
+          <p>Server-side JavaScript development</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fas fa-mobile-alt"></i>
+          <h3>Mobile Development</h3>
+          <p>Cross-platform apps with Cordova</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fas fa-plug"></i>
+          <h3>API Integration</h3>
+          <p>M-Pesa, payment gateways, and third-party services</p>
+        </div>
+        <div class="card skill-card">
+          <i class="fas fa-tools"></i>
+          <h3>Problem Solving</h3>
+          <p>Analytical thinking and creative solutions</p>
+        </div>
+      </div>
+    </section>
+    
+    <section id="contact">
+      <div class="section-header">
+        <h2>Contact Me</h2>
+        <p class="section-subtitle">Get in touch to discuss your project or collaboration opportunity</p>
+      </div>
+      <div class="contact-container">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h3>Email</h3>
+              <p>bettemanuel49@gmail.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <h3>Phone</h3>
+              <p>+254 797 612 155</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h3>Location</h3>
+              <p>Nairobi, Kenya</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <h3>Availability</h3>
+              <p>Open to new projects and opportunities</p>
+            </div>
+          </div>
+          <div class="hero-btns">
+            <a href="mailto:bettemanuel49@gmail.com" class="contact-btn"><i class="fas fa-envelope"></i> Email Me</a>
+            <a href="https://wa.me/+254797612155" target="_blank" class="contact-btn"><i class="fab fa-whatsapp"></i> WhatsApp Me</a>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" class="form-control" placeholder="Enter subject" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" class="form-control" placeholder="Enter your message" required></textarea>
+          </div>
+          <button type="submit" class="btn submit-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="footer-content">
+        <div class="footer-about">
+          <div class="footer-logo">Bett<span>.</span></div>
+          <p>Full-stack developer creating innovative solutions for real-world problems. Passionate about technology and its potential to transform businesses and improve lives.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact Info</h3>
+          <p><i class="fas fa-envelope"></i> bettemanuel49@gmail.com</p>
+          <p><i class="fas fa-phone-alt"></i> +254 797 612 155</p>
+          <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 Emmanuel Bett. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    window.addEventListener("load", function () {
+      const splash = document.getElementById("splash");
+      const main = document.getElementById("main");
+      setTimeout(() => {
+        splash.style.opacity = "0";
+        setTimeout(() => {
+          splash.style.display = "none";
+          main.classList.add("visible");
+        }, 1000);
+      }, 2000);
+    });
+    
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    });
+    
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('active');
+      });
+    });
+    
+    // Form submission
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for your message! I will get back to you soon.');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
