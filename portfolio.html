@@ -1,0 +1,1597 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Emmanuel Bett — Web & IoT Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #f4f7f9;
+      --card: #ffffff;
+      --muted: #666;
+      --accent: #00695c;
+      --accent-2: #00897b;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 8px 30px rgba(15,23,42,0.06);
+      --shadow-hover: 0 16px 40px rgba(15,23,42,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: #0f1720;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Splash Screen */
+    .splash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .splash img {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.18);
+      object-fit: cover;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 6px solid rgba(255,255,255,0.18);
+      border-top-color: #fff;
+      animation: spin 1s linear infinite;
+      margin-top: 18px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(1turn); }
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: white;
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      backdrop-filter: blur(10px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    nav a {
+      color: rgba(255,255,255,0.95);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      background: #fff;
+      color: var(--accent);
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    .ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .ghost:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .intro h1 {
+      font-size: 3rem;
+      margin: 0 0 16px;
+      line-height: 1.2;
+    }
+
+    .intro .subtitle {
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .intro p {
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .featured-tech {
+      color: var(--muted);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .featured-tech span {
+      background: rgba(0,105,92,0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* 3D Animation Container */
+    .animation-container {
+      position: relative;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #laptopCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 20px;
+    }
+
+    section .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: var(--accent);
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* About Section */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-text p {
+      margin-bottom: 20px;
+      color: var(--muted);
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .highlight {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .highlight:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .highlight h3 {
+      color: var(--accent);
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .project {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .project:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .thumb {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .project:hover .thumb img {
+      transform: scale(1.05);
+    }
+
+    .p-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .p-body h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #0f1720;
+    }
+
+    .p-body p {
+      color: var(--muted);
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 6px 12px;
+      background: rgba(0,105,92,0.1);
+      border-radius: 20px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .p-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(6,57,47,0.1);
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0,105,92,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* Skills Section */
+    .skills-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .skills-intro {
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .skills-visual {
+      position: relative;
+      height: 400px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-item {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .skill-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      background: rgba(0,105,92,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .skill-item h3 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .skill-bar {
+      height: 6px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .skill-progress {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    /* Contact Section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-card {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .contact-card h3 {
+      color: var(--accent);
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .contact-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(0,105,92,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+
+    .contact-text {
+      flex: 1;
+    }
+
+    .contact-text strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .contact-text span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 20px;
+      text-align: center;
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .copyright {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      margin-top: 20px;
+    }
+
+    /* Modal */
+    .modal-back {
+      position: fixed;
+      inset: 0;
+      background: rgba(4,7,9,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal {
+      width: min(900px, 100%);
+      background: var(--card);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 18px 60px rgba(12,20,30,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .modal-subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px;
+      line-height: 1;
+    }
+
+    .modal-body {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .modal-section {
+      margin-bottom: 24px;
+    }
+
+    .modal-section h3 {
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .modal-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;uu
+    900l0l00l0l0ll0l0l
+    
+    llll7{oo
+      margin: 15px 0;
+    }
+
+    .modal-feature {
+      background: rgba(0,105,92,0.05);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    /* Back to top */
+    .top-btn {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      display: none;
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: centhij
+      r;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900l
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      align-items: center;9999999999999999999999999999999999999999999999999999999909999999900
+      justify-content: center;
+      cursor: pointer;
+      z-index: 99;
+      transition: all 0.3s ease;
+    }
+
+    .top-btn:hover {
+      background: var(--accent-2);
+      transform: translateY(-3px);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .about-content,
+      .contact-grid,
+      .skills-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      
+      .skills-visual {
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .intro h1 {
+        font-size: 2.2rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .about-highlights {
+        grid-template-columns: 1fr;
+      }
+      
+      .nav {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro h1 {
+        font-size: 1.8rem;
+      }
+      
+      section {
+        padding: 60px 20px;
+      }
+      
+      .modal {
+        padding: 20px;
+      }
+      
+      .modal-actions {
+        flex-direction: column;
+      }
+    }
+
+    /* Animation Classes */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .skill-orb {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: var(--card);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .skill-orb:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div class="splash" id="splash">
+    <img src="https://i.ibb.co/chZcYSVh/your-image.jpg" alt="Bett" />
+    <div style="margin-top:12px;font-weight:700">Emmanuel Bett — Building useful things</div>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">B</div>
+        <div>
+          <div style="font-weight:700">Emmanuel Bett</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.9)">Web & IoT Developer</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="ghost" id="themeToggle">Light</button>
+        <a class="btn" href="#contact">Hire Me</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-grid container">
+      <div class="intro">
+        <span class="subtitle">Hello — Welcome</span>
+        <h1>I'm Emmanuel Bett — <span class="typewriter" id="type">Web & IoT developer</span></h1>
+        <p>I build web apps, mobile tools, and IoT solutions that solve real problems. I design clean interfaces and ship reliable code — focused on impact.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#projects">View My Work</a>
+          <a class="btn" href="#contact">Download CV</a>
+        </div>
+        <div class="featured-tech">
+          Featured: 
+          <span>M-Pesa integrations</span>
+          <span>Firebase real-time apps</span>
+          <span>Arduino IoT prototypes</span>
+        </div>
+      </div>
+      <div class="animation-container">
+        <canvas id="laptopCanvas"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <p class="section-subtitle">Building practical solutions with modern technology</p>
+      <div class="about-content">
+        <div class="about-text">
+          <p>I'm a full-stack developer specializing in creating practical web applications, mobile tools, and IoT solutions. With expertise in JavaScript, Firebase, and Arduino, I build systems that solve real-world problems.</p>
+          <p>My work includes M-Pesa payment integrations, school and hospital management systems, and IoT prototypes that bridge the digital and physical worlds.</p>
+          <div class="about-highlights">
+            <div class="highlight">
+              <h3>Web Development</h3>
+              <p>Responsive web applications with modern JavaScript frameworks and Firebase backend.</p>
+            </div>
+            <div class="highlight">
+              <h3>IoT Solutions</h3>
+              <p>Arduino-based prototypes with sensors and connectivity for real-world applications.</p>
+            </div>
+          </div>
+        </div>
+        <div class="skills-visual" id="skillsVisual">
+          <!-- Animated skills will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" style="background: rgba(0,105,92,0.02);">
+    <div class="container">
+      <h2>Featured Projects</h2>
+      <p class="section-subtitle">A collection of my recent work and solutions</p>
+      
+      <div class="projects-grid" id="projectsGrid">
+        <!-- Projects will be inserted by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <div class="container">
+      <h2>Skills & Tools</h2>
+      <p class="section-subtitle">Technologies I work with to bring ideas to life</p>
+      
+      <div class="skills-container">
+        <div>
+          <p class="skills-intro">I've developed expertise across the full stack, from frontend interfaces to backend systems and IoT hardware integration.</p>
+          <div class="skills-grid">
+            <div class="skill-item">
+              <div class="skill-icon">HTML</div>
+              <h3>HTML & CSS</h3>
+              <p>Responsive Web Design</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-icon">JS</div>
+              <h3>JavaScript</h3>
+              <p>Frontend & Backend</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-icon">FB</div>
+              <h3>Firebase</h3>
+              <p>Realtime DB & Auth</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="80"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-icon">MP</div>
+              <h3>M-Pesa API</h3>
+              <p>Payment Integration</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-icon">IoT</div>
+              <h3>Arduino</h3>
+              <p>IoT Prototyping</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-icon">Node</div>
+              <h3>Node.js</h3>
+              <p>Server-side Applications</p>
+              <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="skills-visual">
+          <canvas id="skillsCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2>Get In Touch</h2>
+      <p class="section-subtitle">Let's discuss your project or collaboration ideas</p>
+      
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-card">
+            <h3>Contact Information</h3>
+            <div class="contact-methods">
+              <div class="contact-method">
+                <div class="contact-icon">@</div>
+                <div class="contact-text">
+                  <strong>Email</strong>
+                  <span>bettemanuel49@gmail.com</span>
+                </div>
+              </div>
+              <div class="contact-method">
+                <div class="contact-icon">📱</div>
+                <div class="contact-text">
+                  <strong>WhatsApp</strong>
+                  <span>+254797612155</span>
+                </div>
+              </div>
+              <div class="contact-method">
+                <div class="contact-icon">📍</div>
+                <div class="contact-text">
+                  <strong>Location</strong>
+                  <span>Kenya</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <h3>Why Work With Me?</h3>
+            <p>I deliver clean, maintainable code with a focus on user experience and practical functionality. Whether you need a web application, IoT solution, or payment integration, I can help bring your idea to life.</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3>Send Me a Message</h3>
+          <p>Interested in working together? Have a project in mind? Feel free to reach out through any of the channels above or use the buttons below to connect directly.</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="mailto:bettemanuel49@gmail.com" class="btn" style="flex: 1; text-align: center;">Email Me</a>
+            <a href="https://wa.me/+254797612155" target="_blank" class="btn" style="flex: 1; text-align: center; background: var(--accent-2);">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div style="font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;">Emmanuel Bett</div>
+      <div style="opacity: 0.8; margin-bottom: 20px;">Web & IoT Developer</div>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="copyright">© 2025 Emmanuel Bett. Built with care.</div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-back" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true" id="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modalTitle">Project Title</div>
+          <div class="modal-subtitle" id="modalSubtitle">Project Subtitle</div>
+        </div>
+        <button id="modalClose" class="modal-close">×</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Project details will be inserted here -->
+      </div>
+      <div class="modal-actions">
+        <a id="modalDemo" class="btn" target="_blank">View Live Demo</a>
+        <a id="modalDetails" class="btn-secondary" target="_blank">View GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="top-btn" id="topBtn">↑</button>
+
+  <script>
+    // Enhanced project data with detailed information
+    const projects = [
+      {
+        title: "Loan Management System",
+        url: "https://manuubett.github.io/Loan/",
+        desc: "A comprehensive loan management system with user accounts, loan tracking, and payment processing.",
+        tags: ["HTML", "JavaScript", "Firebase", "Finance"],
+        demo: true,
+        details: "https://github.com/Manuubett/Loan",
+        features: [
+          "User authentication and account management",
+          "Loan application and approval workflow",
+          "Payment tracking and history",
+          "Admin dashboard for oversight",
+          "Real-time data with Firebase"
+        ],
+        challenges: "Implementing secure user authentication and ensuring data integrity for financial transactions.",
+        solutions: "Used Firebase Authentication for secure access and implemented data validation rules to maintain consistency.",
+        technologies: ["HTML5", "CSS3", "JavaScript", "Firebase Auth", "Firestore"]
+      },
+      {
+        title: "School Management System",
+        url: "https://manuubett.github.io/School-/",
+        desc: "Complete school administration system for managing students, classes, fees, and academic records.",
+        tags: ["HTML", "JavaScript", "Firebase", "Education"],
+        demo: true,
+        details: "https://github.com/Manuubett/School-",
+        features: [
+          "Student information management",
+          "Class and timetable organization",
+          "Fee tracking and payment records",
+          "Academic performance tracking",
+          "Teacher and staff management"
+        ],
+        challenges: "Creating an intuitive interface for non-technical school administrators while handling complex data relationships.",
+        solutions: "Designed a clean, role-based interface and used Firebase's real-time database for instant updates across user roles.",
+        technologies: ["HTML5", "CSS3", "JavaScript", "Firebase", "Chart.js"]
+      },
+      {
+        title: "Hospital Management System",
+        url: "https://manuubett.github.io/hospitalmanagement/",
+        desc: "Healthcare management dashboard for patient records, appointments, and medical staff coordination.",
+        tags: ["HTML", "CSS", "JavaScript", "Healthcare"],
+        demo: true,
+        details: "https://github.com/Manuubett/hospitalmanagement",
+        features: [
+          "Patient registration and records",
+          "Appointment scheduling system",
+          "Medical staff management",
+          "Prescription and treatment tracking",
+          "Billing and insurance processing"
+        ],
+        challenges: "Ensuring data privacy for sensitive medical information while maintaining accessibility for healthcare providers.",
+        solutions: "Implemented role-based access control and data encryption techniques to protect patient confidentiality.",
+        technologies: ["HTML5", "CSS3", "JavaScript", "Local Storage", "Bootstrap"]
+      },
+      {
+        title: "Shop Inventory System",
+        url: "https://manuubett.github.io/Shop-inventory-/",
+        desc: "Inventory management solution with CRUD operations, stock alerts, and sales tracking.",
+        tags: ["JavaScript", "LocalStorage", "Retail"],
+        demo: true,
+        details: "https://github.com/Manuubett/Shop-inventory-",
+        features: [
+          "Product catalog management",
+          "Stock level tracking and alerts",
+          "Sales and purchase records",
+          "Supplier information management",
+          "Inventory reporting and analytics"
+        ],
+        challenges: "Creating an offline-capable system that syncs data when connectivity is available.",
+        solutions: "Used LocalStorage for offline functionality and implemented a sync mechanism for data consistency.",
+        technologies: ["JavaScript", "HTML5", "CSS3", "LocalStorage API"]
+      },
+      {
+        title: "BettKe.space",
+        url: "http://bettke.space/",
+        desc: "Personal portfolio and landing page showcasing projects and professional services.",
+        tags: ["HTML", "Portfolio", "Responsive"],
+        demo: true,
+        details: "http://bettke.space/",
+        features: [
+          "Responsive design for all devices",
+          "Project showcase gallery",
+          "Contact and inquiry forms",
+          "Professional bio and services",
+          "Performance optimized loading"
+        ],
+        challenges: "Creating a visually appealing design that remains functional across all device sizes.",
+        solutions: "Implemented a mobile-first responsive design with CSS Grid and Flexbox for optimal viewing on any screen.",
+        technologies: ["HTML5", "CSS3", "JavaScript", "Responsive Design"]
+      },
+      {
+        title: "Mini Library Management",
+        url: "https://manuubett.github.io/Mini-library-management-system-/",
+        desc: "Compact library system for book cataloging, issuing, returns, and member management.",
+        tags: ["JS", "HTML", "Library"],
+        demo: true,
+        details: "https://github.com/Manuubett/Mini-library-management-system-",
+        features: [
+          "Book catalog and search functionality",
+          "Member registration and management",
+          "Book issuing and return tracking",
+          "Fine calculation for overdue items",
+          "Library activity reports"
+        ],
+        challenges: "Managing complex date calculations for due dates and overdue fines accurately.",
+        solutions: "Implemented robust date handling with JavaScript Date objects and automated fine calculations.",
+        technologies: ["JavaScript", "HTML5", "CSS3", "Local Storage"]
+      }
+    ];
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize 3D Laptop Animation
+      initLaptopAnimation();
+      
+      // Initialize Skills Animation
+      initSkillsAnimation();
+      
+      // Create project cards
+      createProjectCards();
+      
+      // Initialize scroll animations
+      initScrollAnimations();
+      
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Initialize skill progress animations
+      initSkillProgress();
+    });
+
+    // 3D Laptop Animation
+    function initLaptopAnimation() {
+      const canvas = document.getElementById('laptopCanvas');
+      const renderer = new THREE.WebGLRenderer({ 
+        canvas, 
+        antialias: true,
+        alpha: true 
+      });
+      
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      renderer.setClearColor(0x000000, 0);
+      
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+      camera.position.z = 8;
+      
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+      
+      // Add directional light
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(5, 5, 5);
+      scene.add(directionalLight);
+      
+      // Create laptop base (rectangle)
+      const baseGeometry = new THREE.BoxGeometry(4, 0.2, 2.5);
+      const baseMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x00695c,
+        shininess: 30
+      });
+      const base = new THREE.Mesh(baseGeometry, baseMaterial);
+      base.position.y = -0.5;
+      scene.add(base);
+      
+      // Create laptop screen (rectangle)
+      const screenGeometry = new THREE.BoxGeometry(3.8, 2.2, 0.1);
+      const screenMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x1a1a1a,
+        shininess: 10
+      });
+      const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+      screen.position.y = 1.2;
+      screen.position.z = -0.1;
+      scene.add(screen);
+      
+      // Create screen content (smaller rectangle for display)
+      const displayGeometry = new THREE.PlaneGeometry(3.4, 1.8);
+      const displayMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x00897b,
+        side: THREE.DoubleSide
+      });
+      const display = new THREE.Mesh(displayGeometry, displayMaterial);
+      display.position.y = 1.2;
+      display.position.z = 0.05;
+      scene.add(display);
+      
+      // Create keyboard (multiple small rectangles)
+      const keyGeometry = new THREE.BoxGeometry(0.2, 0.05, 0.2);
+      const keyMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+      
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 8; col++) {
+          const key = new THREE.Mesh(keyGeometry, keyMaterial);
+          key.position.x = (col - 3.5) * 0.3;
+          key.position.y = -0.35;
+          key.position.z = (row - 1) * 0.25;
+          base.add(key);
+        }
+      }
+      
+      // Create touchpad (rectangle on base)
+      const touchpadGeometry = new THREE.PlaneGeometry(1.5, 0.8);
+      const touchpadMaterial = new THREE.MeshPhongMaterial({ 
+        color: 0x222222,
+        side: THREE.DoubleSide
+      });
+      const touchpad = new THREE.Mesh(touchpadGeometry, touchpadMaterial);
+      touchpad.rotation.x = Math.PI / 2;
+      touchpad.position.y = -0.35;
+      touchpad.position.z = 0.6;
+      base.add(touchpad);
+      
+      // Animation variables
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetRotationX = 0;
+      let targetRotationY = 0;
+      
+      // Handle mouse move for interactive rotation
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (event.clientY / window.innerHeight) * 2 - 1;
+        targetRotationY = mouseX * 0.5;
+        targetRotationX = -mouseY * 0.3;
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      });
+      
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        // Smooth rotation towards target
+        base.rotation.y += (targetRotationY - base.rotation.y) * 0.05;
+        base.rotation.x += (targetRotationX - base.rotation.x) * 0.05;
+        
+        // Gentle floating animation
+        base.position.y = -0.5 + Math.sin(Date.now() * 0.001) * 0.1;
+        
+        renderer.render(scene, camera);
+      }
+      
+      animate();
+    }
+
+    // Skills Animation (Floating Orbs)
+    function initSkillsAnimation() {
+      const skillsVisual = document.getElementById('skillsVisual');
+      const skills = ['HTML', 'CSS', 'JS', 'Firebase', 'Node.js', 'IoT'];
+      const colors = ['#00695c', '#00897b', '#004d40', '#00796b', '#005a4c', '#004d40'];
+      
+      skills.forEach((skill, index) => {
+        const orb = document.createElement('div');
+        orb.className = 'skill-orb';
+        orb.textContent = skill;
+        orb.style.background = colors[index];
+        orb.style.color = 'white';
+        orb.style.left = `${20 + (index % 3) * 30}%`;
+        orb.style.top = `${20 + Math.floor(index / 3) * 30}%`;
+        skillsVisual.appendChild(orb);
+        
+        // Add floating animation
+        gsap.to(orb, {
+          y: Math.sin(index) * 20,
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: index * 0.2
+        });
+      });
+    }
+
+    // Create Project Cards
+    function createProjectCards() {
+      const grid = document.getElementById('projectsGrid');
+      
+      projects.forEach((project, index) => {
+        const card = document.createElement('article');
+        card.className = 'project fade-in';
+        
+        card.innerHTML = `
+          <div class="thumb">
+            <img src="https://api.allorigins.win/raw?url=${encodeURIComponent(project.url)}" alt="${project.title}" onerror="this.src='https://i.ibb.co/3f0H6kB/placeholder.png'">
+          </div>
+          <div class="p-body">
+            <h3>${project.title}</h3>
+            <p>${project.desc}</p>
+            <div class="tags">
+              ${project.tags.map(tag => `<div class="tag">${tag}</div>`).join('')}
+            </div>
+            <div class="p-actions">
+              <a class="btn" href="${project.url}" target="_blank">View Demo</a>
+              <button class="btn-secondary" onclick="openProjectDetails(${index})">View Details</button>
+            </div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Open Project Details Modal
+    function openProjectDetails(index) {
+      const project = projects[index];
+      const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalBody = document.getElementById('modalBody');
+      const modalDemo = document.getElementById('modalDemo');
+      const modalDetails = document.getElementById('modalDetails');
+      const modalBack = document.getElementById('modalBack');
+      
+      modalTitle.textContent = project.title;
+      modalSubtitle.textContent = project.desc;
+      
+      modalBody.innerHTML = `
+        <div class="modal-section">
+          <h3>Project Overview</h3>
+          <p>${project.desc}</p>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Key Features</h3>
+          <div class="modal-features">
+            ${project.features.map(feature => `
+              <div class="modal-feature">${feature}</div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Technical Implementation</h3>
+          <p><strong>Technologies Used:</strong> ${project.technologies.join(', ')}</p>
+          
+          <div style="margin-top: 15px;">
+            <strong>Challenges:</strong>
+            <p>${project.challenges}</p>
+          </div>
+          
+          <div style="margin-top: 15px;">
+            <strong>Solutions:</strong>
+            <p>${project.solutions}</p>
+          </div>
+        </div>
+      `;
+      
+      modalDemo.href = project.url;
+      modalDetails.href = project.details;
+      
+      modalBack.style.display = 'flex';
+    }
+
+    // Initialize Scroll Animations
+    function initScrollAnimations() {
+      // Register ScrollTrigger plugin
+      gsap.registerPlugin(ScrollTrigger);
+      
+      // Animate elements on scroll
+      gsap.utils.toArray('.fade-in').forEach(element => {
+        gsap.fromTo(element, {
+          opacity: 0,
+          y: 50
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      });
+      
+      // Animate skill bars on scroll
+      gsap.utils.toArray('.skill-progress').forEach(progressBar => {
+        const width = progressBar.getAttribute('data-width');
+        
+        ScrollTrigger.create({
+          trigger: progressBar,
+          start: "top 80%",
+          onEnter: () => {
+            gsap.to(progressBar, {
+              scaleX: width / 100,
+              duration: 1.5,
+              ease: "power2.out"
+            });
+          }
+        });
+      });
+    }
+
+    // Initialize Skill Progress Bars
+    function initSkillProgress() {
+      // This is handled by the scroll animations above
+    }
+
+    // Set Up Event Listeners
+    function setupEventListeners() {
+      // Modal close functionality
+      const modalBack = document.getElementById('modalBack');
+      const modalClose = document.getElementById('modalClose');
+      
+      modalClose.addEventListener('click', () => {
+        modalBack.style.display = 'none';
+      });
+      
+      modalBack.addEventListener('click', (e) => {
+        if (e.target === modalBack) {
+          modalBack.style.display = 'none';
+        }
+      });
+      
+      // Escape key to close modal
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          modalBack.style.display = 'none';
+        }
+      });
+      
+      // Splash screen hide
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.getElementById('splash').style.display = 'none';
+        }, 1500);
+      });
+      
+      // Theme toggle
+      const themeToggle = document.getElementById('themeToggle');
+      let light = true;
+      
+      themeToggle.addEventListener('click', () => {
+        light = !light;
+        if (!light) {
+          // Dark theme
+          document.documentElement.style.setProperty('--bg', '#071227');
+          document.documentElement.style.setProperty('--card', '#07122b');
+          document.documentElement.style.setProperty('--muted', '#9fb0bc');
+          document.documentElement.style.setProperty('--accent', '#2dd4bf');
+          document.documentElement.style.setProperty('--accent-2', '#06b6d4');
+          themeToggle.textContent = 'Dark';
+        } else {
+          // Light theme
+          document.documentElement.style.setProperty('--bg', '#f4f7f9');
+          document.documentElement.style.setProperty('--card', '#ffffff');
+          document.documentElement.style.setProperty('--muted', '#666');
+          document.documentElement.style.setProperty('--accent', '#00695c');
+          document.documentElement.style.setProperty('--accent-2', '#00897b');
+          themeToggle.textContent = 'Light';
+        }
+      });
+      
+      // Typewriter effect
+      (function typeWriter() {
+        const el = document.getElementById('type');
+        const phrases = ['Web & IoT developer', 'Mobile apps creator', 'Smart IoT prototypes', 'M-Pesa integrations'];
+        let pi = 0, ci = 0, dir = 1;
+        
+        function step() {
+          el.textContent = phrases[pi].slice(0, ci);
+          ci += dir;
+          
+          if (ci > phrases[pi].length) {
+            dir = -1;
+            ci = phrases[pi].length - 1;
+            setTimeout(step, 1500);
+            return;
+          }
+          
+          if (ci < 0) {
+            dir = 1;
+            pi = (pi + 1) % phrases.length;
+            ci = 1;
+          }
+          
+          setTimeout(step, dir > 0 ? 80 : 40);
+        }
+        
+        step();
+      })();
+      
+      // Back to top button
+      const topBtn = document.getElementById('topBtn');
+      
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          topBtn.style.display = 'flex';
+        } else {
+          topBtn.style.display = 'none';
+        }
+      });
+      
+      topBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+
+    // Make openProjectDetails function available globally
+    window.openProjectDetails = openProjectDetails;
+  </script>
+</body>
+</html>
